@@ -3,7 +3,7 @@ class ImageInfo {
     data = null;
   
     constructor({ $target, data }) {
-      const $imageInfo = document.createElement("div");
+      const $imageInfo = document.createElement("details");
       $imageInfo.className = "ImageInfo";
       this.$imageInfo = $imageInfo;
       $target.appendChild($imageInfo);
@@ -23,7 +23,7 @@ class ImageInfo {
         const { name, url, temperament, origin } = this.data.image;
   
         this.$imageInfo.innerHTML = `
-          <details class="content-wrapper">
+          <summary class="content-wrapper">
             <header class="title">
               <span>${name}</span>
               <div class="close">x</div>
@@ -33,7 +33,7 @@ class ImageInfo {
               <div>성격: ${temperament}</div>
               <div>태생: ${origin}</div>
             </body>
-          </details>`;
+          </summary>`;
         this.$imageInfo.style.display = "block";
       } else {
         this.$imageInfo.style.display = "none";
