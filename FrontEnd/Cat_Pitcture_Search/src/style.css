@@ -102,12 +102,12 @@
     width: 100%;
   }
   
-  /* dark mode 처리
+  /* dark mode 처리 */
   @media (prefers-color-scheme: dark) {
-    body {
+    body, .SearchInput, .ImageInfo .content-wrapper {
       background-color: #000;
       color: white;
     }
   }
-  *?
+
   
