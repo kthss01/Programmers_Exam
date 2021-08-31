@@ -23,11 +23,14 @@ JavaScript(ES6)
 HTML, CSS 관련
     현재 HTML 코드가 전체적으로 <div> 로만 이루어져 있습니다. 
     이 마크업을 시맨틱한 방법으로 변경해야 합니다.
+    -> 1차 마무리
+
     유저가 사용하는 디바이스의 가로 길이에 따라 
     검색결과의 row 당 column 갯수를 적절히 변경해주어야 합니다.
         992px 이하: 3개
         768px 이하: 2개
-    576px 이하: 1개
+        576px 이하: 1개
+    -> 1차 마무리
 
 다크 모드(Dark mode)를 지원하도록 CSS를 수정해야 합니다.
     CSS 파일 내의 다크 모드 관련 주석을 제거한 뒤 구현합니다.
@@ -152,7 +155,7 @@ API
 
     Field name	Type	Description
     data	Object	Id로 검색된 고양이 사진 입니다.
-    
+
     HTTP/1.1 200 OK
     {
     "data": {

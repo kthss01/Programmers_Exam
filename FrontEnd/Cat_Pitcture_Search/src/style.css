@@ -31,6 +31,24 @@
     grid-template-columns: repeat(4, minmax(250px, 1fr));
     grid-gap: 10px;
   }
+
+  @media screen and (max-width: 992px) {
+      .SearchResult {
+          grid-template-columns: repeat(3, 1fr);
+      }
+  }
+
+  @media screen and (max-width: 768px) {
+    .SearchResult {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .SearchResult {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
   
   .SearchResult img {
     width: 100%;
