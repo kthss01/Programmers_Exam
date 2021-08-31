@@ -35,15 +35,17 @@ HTML, CSS 관련
 다크 모드(Dark mode)를 지원하도록 CSS를 수정해야 합니다.
     CSS 파일 내의 다크 모드 관련 주석을 제거한 뒤 구현합니다.
     모든 글자 색상은 #FFFFFF , 배경 색상은 #000000 로 한정합니다.
+    -> 1차 마무리
     기본적으로는 OS의 다크모드의 활성화 여부를 기반으로 동작하게 하되, 
     유저가 테마를 토글링 할 수 있도록 좌측 상단에 해당 기능을 토글하는 체크박스를 만듭니다.
 
 이미지 상세 보기 모달 관련
     디바이스 가로 길이가 768px 이하인 경우, 모달의 가로 길이를 디바이스 가로 길이만큼 늘려야 합니다.
-    필수 이미지를 검색한 후 결과로 주어진 이미지를 클릭하면 모달이 뜨는데, 
+    [필수] 이미지를 검색한 후 결과로 주어진 이미지를 클릭하면 모달이 뜨는데, 
     모달 영역 밖을 누르거나 / 키보드의 ESC 키를 누르거나 / 모달 우측의 닫기(x) 버튼을 누르면 닫히도록 수정해야 합니다.
+    -> 1차 마무리
     모달에서 고양이의 성격, 태생 정보를 렌더링합니다. 해당 정보는 /cats/:id 를 통해 불러와야 합니다.
-    추가 모달 열고 닫기에 fade in/out을 적용해 주세요.
+    [추가] 모달 열고 닫기에 fade in/out을 적용해 주세요.
 
 검색 페이지 관련
     페이지 진입 시 포커스가 input 에 가도록 처리하고, 
@@ -83,14 +85,14 @@ HTML, CSS 관련
                 console.warn(e);     
                 }   
             }    
-            const api = {     
-                fetchGif: keyword => {       
-                    return request(`${API_ENDPOINT}/api/gif/search?q=${keyword}`);     
-                },     
-                fetchGifAll: () => {       
-                    return request(`${API_ENDPOINT}/api/gif/all`);     
-                    }   
-                };
+        const api = {     
+            fetchGif: keyword => {       
+                return request(`${API_ENDPOINT}/api/gif/search?q=${keyword}`);     
+            },     
+            fetchGifAll: () => {       
+                return request(`${API_ENDPOINT}/api/gif/all`);     
+                }   
+            };
 
     SearchResult 에 각 아이템을 클릭하는 이벤트를 Event Delegation 기법을 이용해 수정해주세요.
     컴포넌트 내부의 함수들이나 Util 함수들을 작게 잘 나누어주세요.
