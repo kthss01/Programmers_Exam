@@ -18,9 +18,12 @@ class App {
       $target,
       initialData: this.data,
       onClick: image => {
-        this.imageInfo.setState({
+        api.fetchCat(image.id).then(({ data }) => 
+        {
+          console.log(data);
+          this.imageInfo.setState({
           visible: true,
-          image
+          image: data});
         });
       }
     });
