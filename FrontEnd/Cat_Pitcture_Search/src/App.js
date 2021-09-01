@@ -9,28 +9,42 @@ class App {
 
     this.searchInput = new SearchInput({
       $target,
-      onSearch: keyword => {
-        api.fetchCats(keyword).then(({ data }) => this.setState(data));
+      onSearch: async keyword => {
+        // api.fetchCats(keyword).then(({ data }) => this.setState(data));
+
+        const response = await api.fetchCats(keyword);
+        const cats = response.data;
+        this.setState(cats);
       }
     });
 
     this.searchRandom = new SearchRamdom({
       $target,
-      onSearch: () => {
-        api.fetchRandCats().then(({ data }) => this.setState(data));
+      onSearch: async () => {
+        // api.fetchRandCats().then(({ data }) => this.setState(data));
+        const response = await api.fetchRandCats();
+        const cats = response.data;
+        this.setState(cats);
       }
     })
 
     this.searchResult = new SearchResult({
       $target,
       initialData: this.data,
-      onClick: image => {
-        api.fetchCat(image.id).then(({ data }) => 
-        {
-          // console.log(data);
-          this.imageInfo.setState({
+      onClick: async image => {
+        // api.fetchCat(image.id).then(({ data }) => 
+        // {
+        //   // console.log(data);
+        //   this.imageInfo.setState({
+        //   visible: true,
+        //   image: data});
+        // });
+
+        const response = await api.fetchCat(image.id);
+        const data = response.data;
+        this.imageInfo.setState({
           visible: true,
-          image: data});
+          image: data 
         });
       }
     });
