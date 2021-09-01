@@ -31,24 +31,24 @@
     grid-template-columns: repeat(4, minmax(250px, 1fr));
     grid-gap: 10px;
   }
-
+  
   @media screen and (max-width: 992px) {
       .SearchResult {
           grid-template-columns: repeat(3, 1fr);
       }
   }
-
+  
   @media screen and (max-width: 768px) {
     .SearchResult {
         grid-template-columns: repeat(2, 1fr);
     }
-}
-
-@media screen and (max-width: 576px) {
+  }
+  
+  @media screen and (max-width: 576px) {
     .SearchResult {
         grid-template-columns: repeat(1, 1fr);
     }
-}
+  }
   
   .SearchResult img {
     width: 100%;
@@ -78,6 +78,7 @@
     background-color: rgba(0, 0, 0, 0.5);
   }
   
+  
   .ImageInfo .title {
     display: flex;
     justify-content: space-between;
@@ -96,6 +97,8 @@
     background-color: #fff;
     border: 1px solid #eee;
     border-radius: 5px;
+    opacity: 0;
+    transition: all 1.0s;
   }
   
   .ImageInfo .content-wrapper img {
@@ -109,5 +112,5 @@
       color: white;
     }
   }
-
+  
   
