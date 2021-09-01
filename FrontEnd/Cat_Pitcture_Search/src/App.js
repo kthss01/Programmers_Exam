@@ -14,13 +14,20 @@ class App {
       }
     });
 
+    this.searchRandom = new SearchRamdom({
+      $target,
+      onSearch: () => {
+        api.fetchRandCats().then(({ data }) => this.setState(data));
+      }
+    })
+
     this.searchResult = new SearchResult({
       $target,
       initialData: this.data,
       onClick: image => {
         api.fetchCat(image.id).then(({ data }) => 
         {
-          console.log(data);
+          // console.log(data);
           this.imageInfo.setState({
           visible: true,
           image: data});
