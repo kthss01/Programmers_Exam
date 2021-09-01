@@ -5,6 +5,12 @@ class SearchInput {
     const $searchInput = document.createElement("input");
     this.$searchInput = $searchInput;
     this.$searchInput.placeholder = "고양이를 검색해보세요.|";
+    // this.$searchInput.setAttribute("autofocus", "true");
+    this.$searchInput.autofocus = true;
+
+    this.$searchInput.onfocus = () => {
+      this.$searchInput.value = '';
+    }
 
     $searchInput.className = "SearchInput";
     $target.appendChild($searchInput);
