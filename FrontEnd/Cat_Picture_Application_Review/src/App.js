@@ -6,6 +6,9 @@ import Nodes from './Nodes.js';
 import { request } from './api.js'
 import Loading from './Loading.js';
 
+// nodeId: nodes 형태로 데이터를 불러올 때마다 이곳에 데이터를 쌓는다.
+const cache = {};
+
 export default function App($app) {
     this.state = {
         isRoot: true,
@@ -31,20 +34,35 @@ export default function App($app) {
         onClick: async (node) => {
             try {
                 if (node.type === 'DIRECTORY') {
-                    this.setState({
-                        ...this.state,
-                        isLoading: true
-                    })
 
-                    // DIRECTORYT인 경우 처리
-                    // 여기에서 Breadcrumb 관련 처리를 하게 되면, Nodes에서는 Breadcrumb를 몰라도 됨.
-                    const nextNodes = await request(node.id);
-                    this.setState({
-                        ...this.state,
-                        isRoot: false, // 클릭시에는 root가 아니므로 false 처리함
-                        depth: [...this.state.depth, node],
-                        nodes: nextNodes,
-                    });
+                    if(cache[node.id]) {
+                        // console.log('onclick cache', cache);
+                        // console.log('onclick state', this.state);
+                        this.setState({
+                            ...this.state,
+                            isRoot: false,
+                            depth: [...this.state.depth, node],
+                            nodes: cache[node.id]
+                        });
+                    } else {
+                        this.setState({
+                            ...this.state,
+                            isLoading: true
+                        })
+    
+                        // DIRECTORYT인 경우 처리
+                        // 여기에서 Breadcrumb 관련 처리를 하게 되면, Nodes에서는 Breadcrumb를 몰라도 됨.
+                        const nextNodes = await request(node.id);
+                        this.setState({
+                            ...this.state,
+                            isRoot: false, // 클릭시에는 root가 아니므로 false 처리함
+                            depth: [...this.state.depth, node],
+                            nodes: nextNodes,
+                        });
+
+                        // cache update
+                        cache[node.id] = nextNodes;
+                    }
                 } else if (node.type === 'FILE') {
 
                     // console.log(this.state, node.filePath);
@@ -83,22 +101,28 @@ export default function App($app) {
                     ...this.state,
                     isLoading: true
                 })
-
+                
+                // 현재 구현된 코드에서는 불러오는 모든 데이터를 cache에 넣고 있으므로
+                // 이전으로 돌아가는 경우 이전 데이터가 cache에 있어야 정상임
                 // root로 온 경우이므로 root 처리
                 if (prevNodeId === null) {
-                    const rootNodes = await request();
+                    //const rootNodes = await request();
+
+                    //console.log(rootNodes);
+                    //console.log(cache);
+
                     this.setState({
                         ...nextState,
                         isRoot: true,
-                        nodes: rootNodes
+                        nodes: cache.root
                     });
                 } else {
-                    const prevNodes = await request(prevNodeId);
+                    //const prevNodes = await request(prevNodeId);
 
                     this.setState({
                         ...nextState,
                         isRoot: false,
-                        nodes: prevNodes
+                        nodes: cache[prevNodeId]
                     });
                 }
             } catch(e) {
@@ -126,7 +150,7 @@ export default function App($app) {
     // App 컴포넌트에도 setState 함수 정의하기
     this.setState = (nextState) => {
 
-        console.log(nextState);
+        console.log('setstate', nextState);
 
         this.state = nextState;
         breadcrumb.setState(this.state.depth);
@@ -148,9 +172,14 @@ export default function App($app) {
             const rootNodes = await request();
             this.setState({
                 ...this.state,
+                isLoading: false,
                 isRoot: true,
                 nodes: rootNodes,
             });
+
+            // 캐시에 추가
+            cache.root = rootNodes;
+
         } catch(e) {
             // 에러처리 하기
         } finally {
