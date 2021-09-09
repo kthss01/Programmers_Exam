@@ -7,7 +7,7 @@ import { request } from './api.js'
 
 export default function App($app) {
     this.state = {
-        isRoot: false,
+        isRoot: true,
         nodes: [],
         depth: [],
         selectedFilePath: null
@@ -34,6 +34,7 @@ export default function App($app) {
                     const nextNodes = await request(node.id);
                     this.setState({
                         ...this.state,
+                        isRoot: false, // 클릭시에는 root가 아니므로 false 처리함
                         depth: [...this.state.depth, node],
                         nodes: nextNodes
                     });
@@ -91,11 +92,14 @@ export default function App($app) {
 
     const imageView = new ImageView({
         $app,
-        initialState: this.state.selectedNodeImage
+        initialState: this.state.selectedFilePath
     });
 
     // App 컴포넌트에도 setState 함수 정의하기
     this.setState = (nextState) => {
+
+        // console.log(nextState);
+
         this.state = nextState;
         breadcrumb.setState(this.state.depth);
         nodes.setState({
@@ -106,6 +110,8 @@ export default function App($app) {
     }
 
     const init = async () => {
+        console.log('init');
+
         try {
             const rootNodes = await request();
             this.setState({

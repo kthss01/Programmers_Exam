@@ -38,9 +38,11 @@ export default function Nodes({ $app, initialState, onClick, onBackClick }) {
                 `;
             }).join('');
 
+            // console.log(this.state.isRoot);
+
             // root directory 렌더링이 아닌 경우 뒤로가기를 렌더링
             // 뒤로가기의 경우 data-node-id attribute를 렌더링하지 않음
-            this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="/assets/prev.png"></div>${nodesTemplate}` : nodesTemplate;
+            this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="./assets/prev.png"></div>${nodesTemplate}` : nodesTemplate;
         }
 
         // 렌더링된 이후 클릭 가능한 모든 요소에 click 이벤트 걸기
