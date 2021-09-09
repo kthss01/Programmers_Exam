@@ -45,30 +45,54 @@ export default function Nodes({ $app, initialState, onClick, onBackClick }) {
             this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="./assets/prev.png"></div>${nodesTemplate}` : nodesTemplate;
         }
 
-        // 렌더링된 이후 클릭 가능한 모든 요소에 click 이벤트 걸기
-        this.$target.querySelectorAll('.Node').forEach($node => {
-            $node.addEventListener('click', (e) => {
+        // 기존 이벤트 바인딩 코드 제거
+        // // 렌더링된 이후 클릭 가능한 모든 요소에 click 이벤트 걸기
+        // this.$target.querySelectorAll('.Node').forEach($node => {
+        //     $node.addEventListener('click', (e) => {
 
-                // e.target.dataset이 아니라 부모요소의 dataset이었음
-                // console.log(e);
-                // console.log(e.target.parentElement);
-                // console.log(e.target.parentElement.dataset);
+        //         // e.target.dataset이 아니라 부모요소의 dataset이었음
+        //         // console.log(e);
+        //         // console.log(e.target.parentElement);
+        //         // console.log(e.target.parentElement.dataset);
 
-                // dataset을 통해 data-로 시작하는 attribute를 꺼내올 수 있음
-                const { nodeId } = e.target.parentElement.dataset;
+        //         // dataset을 통해 data-로 시작하는 attribute를 꺼내올 수 있음
+        //         const { nodeId } = e.target.parentElement.dataset;
 
-                if (!nodeId) {
-                    this.onBackClick();
-                }
+        //         if (!nodeId) {
+        //             this.onBackClick();
+        //         }
 
-                const selectedNode = this.state.nodes.find(node => node.id === nodeId);
+        //         const selectedNode = this.state.nodes.find(node => node.id === nodeId);
 
-                if (selectedNode) {
-                    this.onClick(selectedNode);
-                }
-            });
-        });
+        //         if (selectedNode) {
+        //             this.onClick(selectedNode);
+        //         }
+        //     });
+        // });
     }
+
+    this.$target.addEventListener('click', (e) => {
+        // $target 하위에 있는 HTML 요소 클릭시 이벤트가 상위로 계속 전파 됨녀서
+        // $target까지 오게 됨. 이 특성을 이용한 기법
+
+        // closest를 이용하면 현재 클릭한 요소와 제일 인접한 요소를 가져올 수 있음.
+        const $node = e.target.closest('.Node');
+
+        if ($node) {
+            const { nodeId } = $node.dataset;
+
+            if (!nodeId) {
+                this.onBackClick();
+                return;
+            }
+
+            const selectedNode = this.state.nodes.find(node => node.id === nodeId);
+
+            if (selectedNode) {
+                this.onClick(selectedNode);
+            }
+        }
+    });
 
     // 인스턴스화 이후 바로 render 함수를 실행하며 new로 생성하자마자 렌더링 되도록 할 수 있음
     this.render();
