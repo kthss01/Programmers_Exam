@@ -42,6 +42,35 @@ function App($app) {
             } catch(e) {
                 // 에러처리하기
             }
+        },
+        onBackClick: async () => {
+            try {
+                // 이전 state를 복사하여 처리
+                const nextState = { ...this.state };
+                nextState.depth.pop();
+
+                const prevNodeId = nextState.depth.length === 0 ? null : nextState.depth[nextState.depth.length - 1].id;
+
+                // root로 온 경우이므로 root 처리
+                if (prevNodeId === null) {
+                    const rootNodes = await request();
+                    this.setState({
+                        ...nextState,
+                        isRoot: true,
+                        nodes: rootNodes
+                    });
+                } else {
+                    const prevNodes = await request(prevNodeId);
+
+                    this.setState({
+                        ...nextState,
+                        isRoot: false,
+                        nodes: prevNodes
+                    });
+                }
+            } catch(e) {
+                // 에러처리
+            }
         }
     });
 

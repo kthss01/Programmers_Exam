@@ -1,7 +1,7 @@
 // Nodes 컴포넌트
 // 생성된 DOM을 어이데 append 할지를 $app 파라미터로 받기
 // 파라미터는 구조 분해 할당 방식으로 처리
-function Nodes({ $app, initialState, onClick }) {
+function Nodes({ $app, initialState, onClick, onBackClick }) {
     this.state = initialState;
 
     // Nodes 컴포넌트를 렌더링 할 DOM을 this.$target이라는 이름으로 생성
@@ -19,6 +19,8 @@ function Nodes({ $app, initialState, onClick }) {
     // onClick은 함수이며, 클릭한 Node의 type과 id를 파라미터로 넘겨받도록 함
     this.onClick = onClick;
 
+    this.onBackClick = onBackClick;
+
     // 파라미터가 없는 Nodes의 render 함수,
     // 현재 상태(this.state) 기준으로 렌더링함
     this.render = () => {
@@ -34,6 +36,8 @@ function Nodes({ $app, initialState, onClick }) {
                 `;
             }).join('');
 
+            // root directory 렌더링이 아닌 경우 뒤로가기를 렌더링
+            // 뒤로가기의 경우 data-node-id attribute를 렌더링하지 않음
             this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="/assets/prev.png"></div>${nodesTemplate}` : nodesTemplate;
         }
 
@@ -42,6 +46,11 @@ function Nodes({ $app, initialState, onClick }) {
             $node.addEventListener('click', (e) => {
                 // dataset을 통해 data-로 시작하는 attribute를 꺼내올 수 있음
                 const { nodeId } = e.target.dataset;
+
+                if (!nodeId) {
+                    this.onBackClick();
+                }
+
                 const selectedNode = this.state.nodes.find(node => node.id === nodeId);
 
                 if (selectedNode) {
