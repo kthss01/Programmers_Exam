@@ -16,6 +16,7 @@ export default function App($app) {
         depth: [],
         selectedFilePath: null,
         isLoading: false,
+        isView: false,
     };
 
     const breadcrumb = new Breadcrumb({
@@ -94,7 +95,7 @@ export default function App($app) {
                     // console.log({...this.state, selectedFilePath: node.filePath});
 
                     // 미리 한번 변수에 넣고 나서야 합쳐짐
-                    const tempState = {...this.state, selectedFilePath: node.filePath};
+                    const tempState = {...this.state, selectedFilePath: node.filePath, isView: true};
 
                     // FILE인 경우 처리
                     // 이미지 보기 처리하기
@@ -175,7 +176,7 @@ export default function App($app) {
     // App 컴포넌트에도 setState 함수 정의하기
     this.setState = (nextState) => {
 
-        console.log('setstate', nextState);
+        //console.log('setstate', nextState);
 
         this.state = nextState;
         breadcrumb.setState(this.state.depth);
@@ -183,7 +184,7 @@ export default function App($app) {
             isRoot: this.state.isRoot,
             nodes: this.state.nodes
         });
-        imageView.setState(this.state.selectedFilePath);
+        imageView.setState(this.state.isView ? this.state.selectedFilePath : null);
         loading.setState(this.state.isLoading);
     }
 
@@ -216,4 +217,15 @@ export default function App($app) {
     }
 
     init();
+
+    // 사진 닫기 처리
+    window.addEventListener("keydown", (e) => {
+        // console.log(e.code);
+        if (e.code === 'Escape') {
+            this.setState({
+                ...this.state,
+                isView: false
+            })
+        }
+    });
 };
