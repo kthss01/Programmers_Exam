@@ -12,6 +12,7 @@ export default function ImageView({ $app, initialState }) {
 
     this.setState = (nextState) => {
         this.state = nextState;
+
         this.render();
     }
 

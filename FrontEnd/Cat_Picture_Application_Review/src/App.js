@@ -38,12 +38,21 @@ export default function App($app) {
                         nodes: nextNodes
                     });
                 } else if (node.type === 'FILE') {
+
+                    // console.log(this.state, node.filePath);
+                    // console.log({...this.state, selectedFilePath: node.filePath});
+
+                    // 미리 한번 변수에 넣고 나서야 합쳐짐
+                    const tempState = {...this.state, selectedFilePath: node.filePath};
+
                     // FILE인 경우 처리
                     // 이미지 보기 처리하기
-                    this.setState({
-                        ...this.state,
-                        selectedFilePath: node.fiiePath
-                    });
+                    // 이게 안먹힘 한 객체로 합쳐져서 안들어감
+                    // this.setState({
+                    //     ...this.state,
+                    //     selectedFilePath: node.fiiePath,
+                    // });
+                    this.setState(tempState);
                 } 
             } catch(e) {
                 // 에러처리하기
