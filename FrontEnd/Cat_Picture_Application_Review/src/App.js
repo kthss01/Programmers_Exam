@@ -1,5 +1,11 @@
 // app.js
-function App($app) {
+
+import ImageView from './ImageView.js'
+import Breadcrumb from './Breadcrumb.js';
+import Nodes from './Nodes.js';
+import { request } from './api.js'
+
+export default function App($app) {
     this.state = {
         isRoot: false,
         nodes: [],

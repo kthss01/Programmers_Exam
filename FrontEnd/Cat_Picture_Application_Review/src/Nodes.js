@@ -1,7 +1,7 @@
 // Nodes 컴포넌트
 // 생성된 DOM을 어이데 append 할지를 $app 파라미터로 받기
 // 파라미터는 구조 분해 할당 방식으로 처리
-function Nodes({ $app, initialState, onClick, onBackClick }) {
+export default function Nodes({ $app, initialState, onClick, onBackClick }) {
     this.state = initialState;
 
     // Nodes 컴포넌트를 렌더링 할 DOM을 this.$target이라는 이름으로 생성
