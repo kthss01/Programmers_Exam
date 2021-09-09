@@ -4,7 +4,7 @@
 const API_ENDPOINT = 
     "https://zl3m4qq0l9.execute-api.ap-northeast-2.amazonaws.com/dev";
 
-export const request = (nodeId) => {
+export const request = async (nodeId) => {
     // nodeId 유무에 따라 root directory를 조회할지 특정 directory를 조회할지 처리
     try {
         const res = await fetch(`${API_ENDPOINT}/${nodeId ? nodeId : ''}`);
