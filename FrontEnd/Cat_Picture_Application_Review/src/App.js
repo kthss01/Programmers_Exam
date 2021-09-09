@@ -4,13 +4,15 @@ import ImageView from './ImageView.js'
 import Breadcrumb from './Breadcrumb.js';
 import Nodes from './Nodes.js';
 import { request } from './api.js'
+import Loading from './Loading.js';
 
 export default function App($app) {
     this.state = {
         isRoot: true,
         nodes: [],
         depth: [],
-        selectedFilePath: null
+        selectedFilePath: null,
+        isLoading: false,
     };
 
     const breadcrumb = new Breadcrumb({
@@ -29,6 +31,11 @@ export default function App($app) {
         onClick: async (node) => {
             try {
                 if (node.type === 'DIRECTORY') {
+                    this.setState({
+                        ...this.state,
+                        isLoading: true
+                    })
+
                     // DIRECTORYT인 경우 처리
                     // 여기에서 Breadcrumb 관련 처리를 하게 되면, Nodes에서는 Breadcrumb를 몰라도 됨.
                     const nextNodes = await request(node.id);
@@ -36,7 +43,7 @@ export default function App($app) {
                         ...this.state,
                         isRoot: false, // 클릭시에는 root가 아니므로 false 처리함
                         depth: [...this.state.depth, node],
-                        nodes: nextNodes
+                        nodes: nextNodes,
                     });
                 } else if (node.type === 'FILE') {
 
@@ -57,6 +64,11 @@ export default function App($app) {
                 } 
             } catch(e) {
                 // 에러처리하기
+            } finally {
+                this.setState({
+                    ...this.state,
+                    isLoading: false
+                })
             }
         },
         onBackClick: async () => {
@@ -66,6 +78,11 @@ export default function App($app) {
                 nextState.depth.pop();
 
                 const prevNodeId = nextState.depth.length === 0 ? null : nextState.depth[nextState.depth.length - 1].id;
+
+                this.setState({
+                    ...this.state,
+                    isLoading: true
+                })
 
                 // root로 온 경우이므로 root 처리
                 if (prevNodeId === null) {
@@ -86,6 +103,11 @@ export default function App($app) {
                 }
             } catch(e) {
                 // 에러처리
+            } finally {
+                this.setState({
+                    ...this.state,
+                    isLoading: false
+                })
             }
         }
     });
@@ -95,10 +117,16 @@ export default function App($app) {
         initialState: this.state.selectedFilePath
     });
 
+
+    const loading = new Loading({
+        $app,
+        initialState: this.state.isLoading
+    });
+
     // App 컴포넌트에도 setState 함수 정의하기
     this.setState = (nextState) => {
 
-        // console.log(nextState);
+        console.log(nextState);
 
         this.state = nextState;
         breadcrumb.setState(this.state.depth);
@@ -107,20 +135,29 @@ export default function App($app) {
             nodes: this.state.nodes
         });
         imageView.setState(this.state.selectedFilePath);
+        loading.setState(this.state.isLoading);
     }
 
     const init = async () => {
-        console.log('init');
-
         try {
+            this.setState({
+                ...this.state,
+                isLoading: true
+            })
+
             const rootNodes = await request();
             this.setState({
                 ...this.state,
                 isRoot: true,
-                nodes: rootNodes
+                nodes: rootNodes,
             });
         } catch(e) {
             // 에러처리 하기
+        } finally {
+            this.setState({
+                ...this.state,
+                isLoading: false
+            })
         }
     }
 
