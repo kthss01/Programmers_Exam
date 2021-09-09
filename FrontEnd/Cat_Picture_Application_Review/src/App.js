@@ -3,7 +3,8 @@ function App($app) {
     this.state = {
         isRoot: false,
         nodes: [],
-        depth: []
+        depth: [],
+        selectedFilePath: null
     };
 
     const breadcrumb = new Breadcrumb({
@@ -33,11 +34,20 @@ function App($app) {
                 } else if (node.type === 'FILE') {
                     // FILE인 경우 처리
                     // 이미지 보기 처리하기
+                    this.setState({
+                        ...this.state,
+                        selectedFilePath: node.fiiePath
+                    });
                 } 
             } catch(e) {
                 // 에러처리하기
             }
         }
+    });
+
+    const imageView = new ImageView({
+        $app,
+        initialState: this.state.selectedNodeImage
     });
 
     // App 컴포넌트에도 setState 함수 정의하기
@@ -48,6 +58,7 @@ function App($app) {
             isRoot: this.state.isRoot,
             nodes: this.state.nodes
         });
+        imageView.setState(this.state.selectedFilePath);
     }
 
     const init = async () => {
